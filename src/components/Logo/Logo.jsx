@@ -5,8 +5,9 @@ import logo from '../../assets/logo.png'
 
 const Logo = () => {
     return (
-        <div>
+        <div className='flex items-end'>
             <img src={logo} alt="" />
+            <h3 className="text-3xl font-bold -ms-2.5">PercelX</h3>
             
         </div>
     );
