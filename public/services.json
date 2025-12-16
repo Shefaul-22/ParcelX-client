@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Express & Standard Delivery",
+    "description": "Fast and reliable express and standard delivery services designed to meet urgent and regular shipping needs with accurate tracking and timely parcel handling nationwide.",
+    "image": "https://i.ibb.co/7gkZpQf/express-delivery.png"
+  },
+  {
+    "id": 2,
+    "title": "Nationwide Delivery",
+    "description": "Seamless nationwide delivery network ensuring your parcels reach every corner of the country safely, efficiently, and on time with consistent service quality.",
+    "image": "https://i.ibb.co/9c8YqvP/nationwide-delivery.png"
+  },
+  {
+    "id": 3,
+    "title": "Fulfillment Solution",
+    "description": "Complete fulfillment solutions including storage, packaging, order processing, and last-mile delivery to help businesses streamline operations and scale efficiently.",
+    "image": "https://i.ibb.co/2M7ZQZg/fulfillment.png"
+  },
+  {
+    "id": 4,
+    "title": "Cash on Home Delivery",
+    "description": "Secure cash on home delivery service allowing customers to pay upon receiving parcels while ensuring fast fund settlement and transparent payment tracking for merchants.",
+    "image": "https://i.ibb.co/6mN9k2L/cash-on-delivery.png"
+  },
+  {
+    "id": 5,
+    "title": "Corporate Service / Contract In Logistics",
+    "description": "Tailored corporate logistics and contract-based delivery services offering customized solutions, dedicated support, and cost-effective transportation for growing enterprises.",
+    "image": "https://i.ibb.co/S0x6x3X/corporate-logistics.png"
+  },
+  {
+    "id": 6,
+    "title": "Parcel Return",
+    "description": "Hassle-free parcel return service enabling customers to return products easily while merchants enjoy smooth reverse logistics and efficient return management processes.",
+    "image": "https://i.ibb.co/z7H8F8M/parcel-return.png"
+  }
+]
