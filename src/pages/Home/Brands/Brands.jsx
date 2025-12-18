@@ -16,30 +16,35 @@ const brandsLogos = [amazon, amazon_vector, casio, moonstar, randstad, star, sta
 
 const Brands = () => {
     return (
-        <Swiper
+        <div>
+            <div className='my-7 md:my-12'>
+                <h2 className='font-bold text-3xl md:text-4xl text-center'>We works with</h2>
+            </div>
+            <Swiper
 
-            loop={true}
-            slidesPerView={4}
-            centeredSlides={true}
-            spaceBetween={30}
-            grabCursor={true}
-            modules={[Autoplay]}
+                loop={true}
+                slidesPerView={4}
+                centeredSlides={true}
+                spaceBetween={30}
+                grabCursor={true}
+                modules={[Autoplay]}
 
-            autoplay={{
-                delay: 1000,
-                disableOnInteraction: false,
-            }}
+                autoplay={{
+                    delay: 1000,
+                    disableOnInteraction: false,
+                }}
 
-        >
+            >
 
-            {
-                brandsLogos.map((logo, index) =>
-                    <SwiperSlide key={index}>
-                        <img src={logo} alt="" />
-                    </SwiperSlide>)
-            }
+                {
+                    brandsLogos.map((logo, index) =>
+                        <SwiperSlide key={index}>
+                            <img src={logo} alt="" />
+                        </SwiperSlide>)
+                }
 
-        </Swiper>
+            </Swiper>
+        </div>
     );
 };
 

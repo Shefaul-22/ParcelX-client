@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import useAuth from '../../../hooks/useAuth';
+import { FcGoogle } from 'react-icons/fc';
+import { Link, useNavigate } from 'react-router';
+import SocialLogin from '../SocialLogin/SocialLogin';
+import FormData from "form-data";
+import axios from 'axios';
 
 const Register = () => {
 
     const [showPassword, setShowPassword] = useState(false);
+
+    const { registerUser, UpdateUserProfile } = useAuth();
+
+    const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors }
     } = useForm();
@@ -12,13 +22,75 @@ const Register = () => {
     const handleRegister = (data) => {
 
         console.log("after register", data);
-    }
+        console.log("after register", data, data.photo[0]);
+        const profileImg = data.photo[0];
 
+        registerUser(data.email, data.password)
+            .then(result => {
+                console.log(result.user);
+                // store the image and get the photo url
+                const formData = new FormData();
+                formData.append('image', profileImg)
+
+                const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOST_KEY}`
+
+                axios.post(image_API_URL, formData)
+                    .then(res => {
+                        console.log('after image upload', res);
+                        console.log('after image upload', res.data.data.url);
+                        // update the user profile
+                        const userProfile = {
+                            displayName: data.name,
+                            photoURL: res.data.data.url,
+                        }
+
+                        UpdateUserProfile(userProfile)
+                            .then(() => {
+                                console.log('userProfile updated done');
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    })
+
+
+                navigate("/login");
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
+    }
 
     return (
         <div>
+            <div className='space-y-2 mb-5 md:7'>
+                <h2 className='font-extrabold text-2xl md:text-4xl'>Create an Account</h2>
+                <p>Register with PercelX</p>
+            </div>
             <form onSubmit={handleSubmit(handleRegister)}>
                 <fieldset className="fieldset">
+
+                    {/* Name */}
+                    <label className="label font-medium text-[14px]">Name</label>
+                    <input type="text" className="input w-full md:w-2/3"
+                        {...register('name', { required: true })}
+                        placeholder="Your name" />
+
+                    {errors.name?.type === "required" && (
+                        <p className='text-red-500'>Name is required</p>
+                    )}
+
+                    {/* Photo image field */}
+                    <label className="label font-medium text-[14px]">Upload a image</label>
+
+                    <input type="file" className="file-input w-full md:w-2/3"
+                        {...register('photo')}
+                        placeholder="Your Photo" />
+
+                    {errors.name?.type === "required" && (
+                        <p className='text-red-500'>Name is required</p>
+                    )}
 
                     {/* email */}
                     <label className="label font-medium text-[14px]">Email</label>
@@ -65,10 +137,20 @@ const Register = () => {
                     {
                         errors.password?.type === 'pattern' && <p className='text-red-500'>Password must include uppercase, lowercase, number & special character</p>
                     }
-                    <div><a className="link link-hover">Forgot password?</a></div>
-                    <button className="btn bg-primary font-semibold mt-4 w-full md:w-2/3">Login</button>
+
+                    <button className="btn bg-primary font-semibold mt-4 w-full md:w-2/3">Register</button>
                 </fieldset>
+
             </form>
+
+
+
+            <div className='w-full md:w-2/3 my-2'>
+                <p>Already have an Account. <Link to="/login" className='text-blue-500 text-[18px] underline mb-2'>Login</Link></p>
+                <p className='text-center text-xl'>Or</p>
+            </div>
+
+            <SocialLogin></SocialLogin>
         </div>
     );
 };
