@@ -3,6 +3,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+
 
 const SendPercel = () => {
 
@@ -11,6 +13,8 @@ const SendPercel = () => {
     const { register, handleSubmit, control
         // formState: {errors}
     } = useForm();
+
+    const axiosSecure = useAxiosSecure();
 
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
@@ -65,7 +69,11 @@ const SendPercel = () => {
             if (result.isConfirmed) {
 
                 // save the parcel info to the database
-                // 
+
+                axiosSecure.post('/parcels', data)
+                .then(res => {
+                    console.log('after saving in database',res.data);
+                })
                 // Swal.fire({
                 //     title: "Deleted!",
                 //     text: "Your file has been deleted.",
