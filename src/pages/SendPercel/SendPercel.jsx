@@ -1,20 +1,20 @@
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import useAuth from '../../hooks/useAuth';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth';
 
-
-const SendPercel = () => {
-
-    const { user } = useAuth();
-
-    const { register, handleSubmit, control
-        // formState: {errors}
+const SendParcel = () => {
+    const {
+        register,
+        handleSubmit,
+        control,
+        // formState: { errors } 
     } = useForm();
-
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
@@ -30,8 +30,8 @@ const SendPercel = () => {
         return districts;
     }
 
-    const handleSendParcel = data => {
 
+    const handleSendParcel = data => {
         console.log(data);
 
         const isDocument = data.parcelType === 'document';
@@ -56,6 +56,7 @@ const SendPercel = () => {
         }
 
         console.log('cost', cost);
+        data.cost = cost;
 
         Swal.fire({
             title: "Agree with the Cost?",
@@ -64,21 +65,27 @@ const SendPercel = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "I agree!"
+            confirmButtonText: "Confirm and Continue Payment!"
         }).then((result) => {
             if (result.isConfirmed) {
 
                 // save the parcel info to the database
-
                 axiosSecure.post('/parcels', data)
-                .then(res => {
-                    console.log('after saving in database',res.data);
-                })
-                // Swal.fire({
-                //     title: "Deleted!",
-                //     text: "Your file has been deleted.",
-                //     icon: "success"
-                // });
+                    .then(res => {
+                        console.log('after saving parcel', res.data);
+                        if (res.data.insertedId) {
+                            navigate('/dashboard/my-parcels')
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Parcel has created. Please Pay",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                        }
+                    })
+
+
             }
         });
 
@@ -86,8 +93,7 @@ const SendPercel = () => {
 
     return (
         <div>
-            <h2 className='text-3xl md:text-5xl'>Send A Parcel</h2>
-
+            <h2 className="text-5xl font-bold">Send A Parcel</h2>
             <form onSubmit={handleSubmit(handleSendParcel)} className='mt-12 p-4 text-black'>
                 {/* parcel type*/}
                 <div>
@@ -132,14 +138,10 @@ const SendPercel = () => {
                             defaultValue={user?.email}
                             className="input w-full" placeholder="Sender Email" />
 
-                        {/* Sender phone */}
-                        <label className="label">Sender Phone</label>
-                        <input type="text" {...register('senderPhone')} className="input w-full" placeholder="Sender Phone" />
-
                         {/* sender region */}
                         <fieldset className="fieldset">
-                            <legend className="fieldset-legend ">Sender Regions</legend>
-                            <select {...register('senderRegion')} defaultValue="Pick a region" className="select w-full">
+                            <legend className="fieldset-legend">Sender Regions</legend>
+                            <select {...register('senderRegion')} defaultValue="Pick a region" className="select">
                                 <option disabled={true}>Pick a region</option>
                                 {
                                     regions.map((r, i) => <option key={i} value={r}>{r}</option>)
@@ -150,7 +152,7 @@ const SendPercel = () => {
                         {/* sender districts */}
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Sender Districts</legend>
-                            <select {...register('senderDistrict')} defaultValue="Pick a district" className="select w-full">
+                            <select {...register('senderDistrict')} defaultValue="Pick a district" className="select">
                                 <option disabled={true}>Pick a district</option>
                                 {
                                     districtsByRegion(senderRegion).map((r, i) => <option key={i} value={r}>{r}</option>)
@@ -176,14 +178,10 @@ const SendPercel = () => {
                         <label className="label">Receiver Email</label>
                         <input type="text" {...register('receiverEmail')} className="input w-full" placeholder="Receiver Email" />
 
-                        {/* receiver phone */}
-                        <label className="label">Receiver Phone</label>
-                        <input type="text" {...register('receiverPhone')} className="input w-full" placeholder="Receiver Phone" />
-
                         {/* receiver region */}
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Receiver Regions</legend>
-                            <select {...register('receiverRegion')} defaultValue="Pick a region" className="select w-full">
+                            <select {...register('receiverRegion')} defaultValue="Pick a region" className="select">
                                 <option disabled={true}>Pick a region</option>
                                 {
                                     regions.map((r, i) => <option key={i} value={r}>{r}</option>)
@@ -194,7 +192,7 @@ const SendPercel = () => {
                         {/* receiver district */}
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Receiver District</legend>
-                            <select {...register('receiverDistrict')} defaultValue="Pick a district" className="select w-full">
+                            <select {...register('receiverDistrict')} defaultValue="Pick a district" className="select">
                                 <option disabled={true}>Pick a district</option>
                                 {
                                     districtsByRegion(receiverRegion).map((d, i) => <option key={i} value={d}>{d}</option>)
@@ -216,4 +214,4 @@ const SendPercel = () => {
     );
 };
 
-export default SendPercel;
+export default SendParcel;

@@ -9,6 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import Rider from "../pages/Rider/Rider";
 import SendPercel from "../pages/SendPercel/SendPercel";
 import DashboardLayout from "../layouts/DashboardLayout";
+import MyParcels from "../pages/Dashboard/MyParcels/MyParcels";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +70,7 @@ export const router = createBrowserRouter([
 
       {
         path: "my-parcels",
+        Component: MyParcels,
       }
     ]
   }
