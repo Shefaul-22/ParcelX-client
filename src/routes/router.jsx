@@ -14,6 +14,8 @@ import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+import ApproveRiders from "../pages/Dashboard/ApprovedRiders/ApprovedRiders";
+import UsersManagement from "../../../zap-shift-client-final-part8/src/pages/Dashboard/UsersManagement/UsersManagement";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +30,8 @@ export const router = createBrowserRouter([
 
         {
           path: "rider",
-          element: <PrivateRoute><Rider></Rider></PrivateRoute>
+          element: <PrivateRoute><Rider></Rider></PrivateRoute>,
+          loader: () => fetch('/serviceCenter.json').then(res => res.json())
         },
 
         {
@@ -89,9 +92,20 @@ export const router = createBrowserRouter([
         path: "payment-cancelled",
         Component: PaymentCancelled,
       },
+
       {
         path: "payment-history",
         Component: PaymentHistory
+      },
+
+      {
+        path: 'approve-riders',
+        Component: ApproveRiders,
+      },
+
+      {
+        path: 'user-management',
+        Component: UsersManagement,
       }
     ]
   }

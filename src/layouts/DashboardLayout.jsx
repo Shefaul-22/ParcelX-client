@@ -21,8 +21,6 @@ const DashboardLayout = () => {
                     </label>
                     <div className="px-4">ParcelX Dashboard</div>
                 </nav>
-
-
                 {/* Page content here */}
                 <Outlet></Outlet>
 
