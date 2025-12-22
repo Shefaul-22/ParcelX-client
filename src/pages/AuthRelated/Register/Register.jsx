@@ -70,7 +70,9 @@ const Register = () => {
                         UpdateUserProfile(userProfile)
                             .then(() => {
                                 console.log('userProfile updated done');
-                                navigate("/login");
+                                navigate("/login",{
+                                    state:location.state
+                                });
                             })
                             .catch(error => {
                                 console.log(error)

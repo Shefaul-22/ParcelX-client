@@ -4,7 +4,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const AssignRiders = () => {
-    const [selectedParcel, setSelectedParcel] = useState(null);
+    const [selectedParcel, setSelectedParcel] = useState({});
     const axiosSecure = useAxiosSecure();
     const riderModalRef = useRef();
 
@@ -17,23 +17,23 @@ const AssignRiders = () => {
     })
 
     // todo: invalidate query after assigning a rider
-    const { data: riders = [] } = useQuery({
-        queryKey: ['riders', selectedParcel?.senderDistrict, 'available'],
-        enabled: !!selectedParcel,
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/riders?status=approved&workStatus=available`);
-            return res.data;
-        }
-    })
-
     // const { data: riders = [] } = useQuery({
     //     queryKey: ['riders', selectedParcel?.senderDistrict, 'available'],
     //     enabled: !!selectedParcel,
     //     queryFn: async () => {
-    //         const res = await axiosSecure.get(`/riders?status=approved&district=${(selectedParcel?.senderDistrict)}&workStatus=available`);
+    //         const res = await axiosSecure.get(`/riders?status=approved&workStatus=available`);
     //         return res.data;
     //     }
     // })
+
+    const { data: riders = [] } = useQuery({
+        queryKey: ['riders', selectedParcel?.senderDistrict, 'available'],
+        enabled: !!selectedParcel?.senderDistrict,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/riders?status=approved&district=${(selectedParcel?.senderDistrict)}&workStatus=available`);
+            return res.data;
+        }
+    })
 
 
 
@@ -69,7 +69,7 @@ const AssignRiders = () => {
 
     return (
         <div>
-            <h2 className="text-5xl">Assign Riders: {parcels.length}</h2>
+            <h2 className="text-5xl">Parcel in Queue to delivered: {parcels.length}</h2>
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
